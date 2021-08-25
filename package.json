@@ -1,6 +1,6 @@
 {
   "name": "mee6-levels",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "API Wrapper for MEE6 to access level information per guild and user!",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

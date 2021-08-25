@@ -34,4 +34,6 @@ interface PossibleObj {
     id: string;
 }
 declare type VarIdentity = PossibleObj | string;
-export { MEE6, PossibleObj, VarIdentity, MEE6RoleReward, MEE6Role, MEE6User, MEE6XP };
+declare const _default: typeof MEE6.default;
+export default _default;
+export { PossibleObj, VarIdentity, MEE6RoleReward, MEE6Role, MEE6User, MEE6XP };

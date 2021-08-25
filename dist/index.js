@@ -19,6 +19,5 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MEE6 = void 0;
 const MEE6 = __importStar(require("./MEE6"));
-exports.MEE6 = MEE6;
+exports.default = MEE6.default;

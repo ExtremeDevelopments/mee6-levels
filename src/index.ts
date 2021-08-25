@@ -37,10 +37,9 @@ interface PossibleObj {
   id: string
 }
 
- type VarIdentity = PossibleObj | string
-
+type VarIdentity = PossibleObj | string
+export default MEE6.default
 export {
-  MEE6,
   PossibleObj,
   VarIdentity,
   MEE6RoleReward,
