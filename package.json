@@ -1,8 +1,29 @@
 {
+  "name": "mee6-levels",
+  "version": "1.0.0",
+  "description": "API Wrapper for MEE6 to access level information per guild and user!",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "dependencies": {
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.5.12"
-  }
+  },
+  "author": "Extreme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ExtremeDevelopments/mee6-levels.git"
+  },
+  "keywords": [
+    "discord",
+    "api",
+    "mee6",
+    "wrapper",
+    "levels"
+  ],
+  "license": "MIT"
 }
