@@ -1,21 +1,8 @@
 import fetch, { FetchError } from "node-fetch";
-
+///<reference path="node.d.ts" />
+import VarIdentity, { MEE6User, MEE6RoleReward } from 'mee6-levels'
 const defaultURL = "https://mee6.xyz/api/plugins/levels/leaderboard/"
-interface PossibleObjectTypes { id: string }
-interface Mee6User {
-  id: string
-  level: string
-  username: string
-  discriminator: string
-  avatar: string
-  message_count: string
-  detailed_xp: {
-    userXp: string
-    levelXp: string
-    totalXp: string
-  }
-}
-export class Mee6Levels {
+export default class MEE6 {
   private static async makeRequest(endpoint: string): Promise<any> {
     const response = await fetch(defaultURL + endpoint)
 
@@ -25,16 +12,16 @@ export class Mee6Levels {
     return await response.json()
   }
 
-  private static parseID(variable: string | PossibleObjectTypes): string | void {
+  private static parseID(variable: VarIdentity): string | void {
     if (typeof variable == 'string') return variable
     else if (typeof variable.id == 'string') return variable.id
     else throw new Error("Unable to find or parse ID given.")
   }
 
-  public static async fetchLeaderBoardByPage(guild: string | PossibleObjectTypes, page: number = 0, limit: number = 1000): Promise<Array<Mee6User>> {
+  public static async fetchLeaderboardByPage(guild: VarIdentity, page: number = 0, limit: number = 1000): Promise<MEE6User[]> {
     const id = this.parseID(guild)
     const { users } = await this.makeRequest(id + '?limit=' + limit + '&page=' + page)
-    return users.map((user: Mee6User, index: number) => {
+    return users.map((user: MEE6User, index: number) => {
       const { id, level, username, discriminator, avatar, message_count } = user
       const avatarURL = `https://cdn.discordapp.com/avatars/${id}/${avatar}`
       const rank = (limit * page) + index + 1
@@ -51,7 +38,21 @@ export class Mee6Levels {
     })
   }
 
-  public static async fetchRewards(guild: string | PossibleObjectTypes, sorted: boolean = true) {
+  public static async fetchLeaderboard(guild: VarIdentity): Promise<MEE6User[]> {
+    const id = this.parseID(guild)
+    let pageNum = 0
+    let page
+    const board = []
+    while (true) {
+      page = await this.fetchLeaderboardByPage(id as string, 1000, pageNum)
+      board.push(...page)
+      if (page.length < 1000) break
+      pageNum += 1
+    }
+    return board
+  }
+
+  public static async fetchRewards(guild: VarIdentity, sorted: boolean = true): Promise<MEE6RoleReward[]> {
     const id = this.parseID(guild)
 
     const { role_rewards } = await this.makeRequest(id + '?limit=1')
@@ -59,4 +60,21 @@ export class Mee6Levels {
     //@ts-expect-error
     else return role_rewards.sort((a: any, b: any) => a.rank - b.rank).map(({ rank, ...vars }) => ({ level: rank, ...vars }))
   }
+
+  public static async fetchUser(guild: VarIdentity, user: VarIdentity): Promise<MEE6User | undefined> {
+    const guildID = this.parseID(guild)
+    const userID = this.parseID(user)
+    let pageNum = 0
+    let page
+    let userInfo
+
+    while (true) {
+      page = await this.fetchLeaderboardByPage(guildID as string, 1000, pageNum)
+      userInfo = page.find(u => u.id === userID)
+      if (page.length < 1000 || userInfo) break
+      pageNum += 1
+
+    }
+  }
+
 }
