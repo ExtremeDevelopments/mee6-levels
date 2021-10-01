@@ -20,7 +20,6 @@ export default class MEE6 {
 
   public static async fetchLeaderboardByPage(guild: VarIdentity, page: number = 0, limit: number = 1000): Promise<MEE6User[]> {
     const id = this.parseID(guild)
-    console.log({ page, limit })
     const { players: users } = await this.makeRequest(id + '?limit=' + limit + '&page=' + page)
     return users.map((user: MEE6User, index: number) => {
       const { id, level, username, discriminator, avatar, message_count, detailed_xp } = user
